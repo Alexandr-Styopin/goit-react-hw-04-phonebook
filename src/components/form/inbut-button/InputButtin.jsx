@@ -1,3 +1,8 @@
+import css from '../inbut-button/InputButtin.module.css';
 export default function form() {
-  return <button type="submit">Add Contact</button>;
+  return (
+    <button className={css.formBtn} type="submit">
+      Add Contact
+    </button>
+  );
 }
