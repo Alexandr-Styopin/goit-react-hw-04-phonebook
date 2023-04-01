@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import Form from './form/Form';
 import Contacts from './Contacts/Contacts';
@@ -8,17 +8,26 @@ import Contacts from './Contacts/Contacts';
 import css from './App.module.css';
 
 export function App() {
-  const [contacts, setContacts] = useState([
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ]);
+  const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   useEffect(() => {
+    console.log(contacts);
+
+    const defaultData = [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ];
+    if (contacts.length === 0) {
+      window.localStorage.setItem('contacts', JSON.stringify(defaultData));
+
+      setContacts(JSON.parse(window.localStorage.getItem('contacts')));
+    }
+
     window.localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
@@ -38,6 +47,27 @@ export function App() {
     }
   };
 
+  const localStorageUpdate = () => {
+    const localStorageData = JSON.parse(
+      window.localStorage.getItem('contacts')
+    );
+
+    const newContactData = [
+      ...localStorageData,
+      { name: name, number: number, id: nanoid() },
+    ];
+
+    window.localStorage.setItem('contacts', JSON.stringify(newContactData));
+
+    return newContactData;
+  };
+
+  const handleRemoveConact = id => {
+    setContacts(prevContacts =>
+      prevContacts.filter(prevContact => prevContact.id !== id)
+    );
+  };
+
   const handleSumitForm = e => {
     e.preventDefault();
 
@@ -46,10 +76,7 @@ export function App() {
       return;
     }
 
-    setContacts(prevContacts => [
-      ...prevContacts,
-      { name: name, number: number, id: nanoid() },
-    ]);
+    setContacts(localStorageUpdate());
   };
 
   const handleInputFilter = e => {
@@ -59,12 +86,6 @@ export function App() {
   const filtredContacts = () => {
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  };
-
-  const handleRemoveConact = id => {
-    setContacts(prevContacts =>
-      prevContacts.filter(prevContact => prevContact.id !== id)
     );
   };
 
@@ -80,12 +101,12 @@ export function App() {
     </div>
   );
 }
-Form.propTypes = {
-  onSubmit: PropTypes.func,
-  onChange: PropTypes.func,
-};
-Contacts.propTypes = {
-  filtredContacts: PropTypes.array,
-  onClickRemove: PropTypes.func,
-  onChangeInput: PropTypes.func,
-};
+// Form.propTypes = {
+//   onSubmit: PropTypes.func,
+//   onChange: PropTypes.func,
+// };
+// Contacts.propTypes = {
+//   filtredContacts: PropTypes.array,
+//   onClickRemove: PropTypes.func,
+//   onChangeInput: PropTypes.func,
+// };
