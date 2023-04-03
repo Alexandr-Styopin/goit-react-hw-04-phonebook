@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import Form from './form/Form';
 import Contacts from './Contacts/Contacts';
@@ -14,8 +14,6 @@ export function App() {
   const [number, setNumber] = useState('');
 
   useEffect(() => {
-    console.log(contacts);
-
     const defaultData = [
       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
       { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
@@ -101,12 +99,12 @@ export function App() {
     </div>
   );
 }
-// Form.propTypes = {
-//   onSubmit: PropTypes.func,
-//   onChange: PropTypes.func,
-// };
-// Contacts.propTypes = {
-//   filtredContacts: PropTypes.array,
-//   onClickRemove: PropTypes.func,
-//   onChangeInput: PropTypes.func,
-// };
+Form.propTypes = {
+  onSubmit: PropTypes.func,
+  onChange: PropTypes.func,
+};
+Contacts.propTypes = {
+  filtredContacts: PropTypes.array,
+  onClickRemove: PropTypes.func,
+  onChangeInput: PropTypes.func,
+};
